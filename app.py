@@ -1,4 +1,3 @@
-# app.py
 # ============================================
 # 📌 NLP Phases for Fake vs Real Detection
 # Using Naive Bayes + Streamlit UI
@@ -6,6 +5,7 @@
 
 import streamlit as st
 import pandas as pd
+import os
 import nltk, string, spacy
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
@@ -16,11 +16,20 @@ from sklearn.naive_bayes import MultinomialNB
 from sklearn.metrics import accuracy_score, classification_report
 
 # ============================
-# Setup
+# Setup: ensure NLTK data
 # ============================
-nltk.download("punkt")
-nltk.download("wordnet")
-nltk.download("stopwords")
+nltk_data_dir = os.path.join(os.getcwd(), "nltk_data")
+if not os.path.exists(nltk_data_dir):
+    os.mkdir(nltk_data_dir)
+nltk.data.path.append(nltk_data_dir)
+
+for pkg in ["punkt", "wordnet", "stopwords"]:
+    try:
+        nltk.data.find(pkg)
+    except LookupError:
+        nltk.download(pkg, download_dir=nltk_data_dir)
+
+# Load spaCy model
 nlp = spacy.load("en_core_web_sm")
 
 lemmatizer = WordNetLemmatizer()
@@ -69,13 +78,12 @@ st.set_page_config(page_title="Fake vs Real Detection (Naive Bayes)", layout="wi
 st.title("📰 Fake vs Real News Detection")
 st.write("Naive Bayes classifier across different NLP phases")
 
-uploaded_file = st.file_uploader("politifact_full.csv", type=["csv"])
+uploaded_file = st.file_uploader("Upload politifact_full.csv", type=["csv"])
 
 if uploaded_file:
     df = pd.read_csv(uploaded_file).head(5000)  # limit for speed
     st.write("Dataset Preview:", df.head())
 
-    # Make sure BinaryTarget exists
     if "BinaryTarget" not in df.columns:
         df["BinaryTarget"] = df["Rating"].apply(
             lambda x: 1 if x in ["true", "mostly-true", "half-true"] else 0
