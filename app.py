@@ -89,7 +89,7 @@ if uploaded_file:
             lambda x: 1 if x in ["true", "mostly-true", "half-true"] else 0
         )
 
-    X = df["Statement"]
+    X = df["statement"]
     y = df["BinaryTarget"]
 
     phase = st.selectbox(
