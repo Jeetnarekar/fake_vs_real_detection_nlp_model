@@ -68,7 +68,7 @@ if uploaded_file:
             lambda x: 1 if x in ["true", "mostly-true", "half-true"] else 0
         )
 
-    X = df["statement"].apply(preprocess)
+    X = df["Statement"].apply(preprocess)
     y = df["BinaryTarget"]
 
     if st.button("Run Training"):
