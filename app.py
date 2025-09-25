@@ -1,143 +1,91 @@
 # ============================================
-# 📌 NLP Phases for Fake vs Real Detection
-# Using Naive Bayes + Streamlit UI
+# 📌 Fake vs Real Detection using TF-IDF + Logistic Regression
 # ============================================
 
 import streamlit as st
 import pandas as pd
-import os
-import nltk, string, spacy
-from nltk.corpus import stopwords
-from nltk.stem import WordNetLemmatizer
-from textblob import TextBlob
+import spacy
 from sklearn.model_selection import train_test_split
-from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
-from sklearn.naive_bayes import MultinomialNB
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, classification_report
 
 # ============================
-# Setup: ensure NLTK data
-# ============================
-nltk_data_dir = os.path.join(os.getcwd(), "nltk_data")
-if not os.path.exists(nltk_data_dir):
-    os.mkdir(nltk_data_dir)
-nltk.data.path.append(nltk_data_dir)
-
-for pkg in ["punkt", "wordnet", "stopwords"]:
-    try:
-        nltk.data.find(pkg)
-    except LookupError:
-        nltk.download(pkg, download_dir=nltk_data_dir)
-
 # Load spaCy model
+# ============================
 nlp = spacy.load("en_core_web_sm")
 
-lemmatizer = WordNetLemmatizer()
-stop_words = set(stopwords.words("english"))
-
 # ============================
-# Helpers
+# Preprocessing
 # ============================
-def train_nb(X_features, y):
-    X_train, X_test, y_train, y_test = train_test_split(
-        X_features, y, test_size=0.2, random_state=42
-    )
-    model = MultinomialNB()
-    model.fit(X_train, y_train)
-    y_pred = model.predict(X_test)
-    acc = accuracy_score(y_test, y_pred)
-    report = classification_report(y_test, y_pred, output_dict=True)
-    return acc, report
-
-def lexical_preprocess(text):
-    tokens = nltk.word_tokenize(str(text).lower())
+def preprocess(text):
+    """Lemmatize + remove stopwords/punct using spaCy"""
+    doc = nlp(str(text).lower())
     tokens = [
-        lemmatizer.lemmatize(w)
-        for w in tokens
-        if w not in stop_words and w not in string.punctuation
+        token.lemma_ for token in doc
+        if not token.is_stop and not token.is_punct
     ]
     return " ".join(tokens)
 
-def syntactic_features(text):
-    doc = nlp(str(text))
-    pos_tags = " ".join([token.pos_ for token in doc])
-    return pos_tags
+# ============================
+# Training function
+# ============================
+def train_model(X, y):
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.2, random_state=42
+    )
+    vectorizer = TfidfVectorizer(max_features=5000)  # limit for efficiency
+    X_train_vec = vectorizer.fit_transform(X_train)
+    X_test_vec = vectorizer.transform(X_test)
 
-def semantic_features(text):
-    blob = TextBlob(str(text))
-    return f"{blob.sentiment.polarity} {blob.sentiment.subjectivity}"
+    model = LogisticRegression(max_iter=500)  # solver auto chooses method
+    model.fit(X_train_vec, y_train)
+    y_pred = model.predict(X_test_vec)
 
-def discourse_features(text):
-    sentences = nltk.sent_tokenize(str(text))
-    return f"{len(sentences)} {' '.join([s.split()[0] for s in sentences if len(s.split())>0])}"
+    acc = accuracy_score(y_test, y_pred)
+    report = classification_report(y_test, y_pred, output_dict=True)
+    return model, vectorizer, acc, report
 
 # ============================
 # Streamlit UI
 # ============================
-st.set_page_config(page_title="Fake vs Real Detection (Naive Bayes)", layout="wide")
+st.set_page_config(page_title="Fake vs Real Detection (TF-IDF + Logistic Regression)", layout="wide")
 st.title("📰 Fake vs Real News Detection")
-st.write("Naive Bayes classifier across different NLP phases")
+st.write("Using **TF-IDF features + Logistic Regression**")
 
 uploaded_file = st.file_uploader("Upload politifact_full.csv", type=["csv"])
+
+trained_model = None
+trained_vectorizer = None
 
 if uploaded_file:
     df = pd.read_csv(uploaded_file).head(5000)  # limit for speed
     st.write("Dataset Preview:", df.head())
 
+    # Create binary target if not present
     if "BinaryTarget" not in df.columns:
         df["BinaryTarget"] = df["Rating"].apply(
             lambda x: 1 if x in ["true", "mostly-true", "half-true"] else 0
         )
 
-    X = df["statement"]
+    X = df["statement"].apply(preprocess)
     y = df["BinaryTarget"]
 
-    phase = st.selectbox(
-        "Choose NLP Phase",
-        ["Lexical & Morphological", "Syntactic", "Semantic", "Discourse"],
-    )
-
     if st.button("Run Training"):
-        if phase == "Lexical & Morphological":
-            X_proc = X.apply(lexical_preprocess)
-            vec = CountVectorizer().fit_transform(X_proc)
-        elif phase == "Syntactic":
-            X_proc = X.apply(syntactic_features)
-            vec = CountVectorizer().fit_transform(X_proc)
-        elif phase == "Semantic":
-            X_proc = X.apply(semantic_features)
-            vec = TfidfVectorizer().fit_transform(X_proc)
-        elif phase == "Discourse":
-            X_proc = X.apply(discourse_features)
-            vec = CountVectorizer().fit_transform(X_proc)
-
-        acc, report = train_nb(vec, y)
-        st.success(f"✅ {phase} Accuracy: {acc:.4f}")
+        trained_model, trained_vectorizer, acc, report = train_model(X, y)
+        st.success(f"✅ Accuracy: {acc:.4f}")
         st.json(report)
 
+    # ============================
+    # Prediction on user input
+    # ============================
     st.subheader("🔍 Test on Custom Input")
     user_text = st.text_area("Enter a statement to classify:")
     if st.button("Classify Statement") and user_text.strip():
-        if phase == "Lexical & Morphological":
-            processed = lexical_preprocess(user_text)
-            vec = CountVectorizer().fit(X.apply(lexical_preprocess))
-        elif phase == "Syntactic":
-            processed = syntactic_features(user_text)
-            vec = CountVectorizer().fit(X.apply(syntactic_features))
-        elif phase == "Semantic":
-            processed = semantic_features(user_text)
-            vec = TfidfVectorizer().fit(X.apply(semantic_features))
-        elif phase == "Discourse":
-            processed = discourse_features(user_text)
-            vec = CountVectorizer().fit(X.apply(discourse_features))
-
-        X_features = vec.transform([processed])
-        model = MultinomialNB().fit(vec.transform(X.apply(
-            lexical_preprocess if phase=="Lexical & Morphological" 
-            else syntactic_features if phase=="Syntactic"
-            else semantic_features if phase=="Semantic"
-            else discourse_features
-        )), y)
-
-        pred = model.predict(X_features)[0]
-        st.write("Prediction:", "✅ True" if pred == 1 else "❌ Fake")
+        if trained_model and trained_vectorizer:
+            processed = preprocess(user_text)
+            vec = trained_vectorizer.transform([processed])
+            pred = trained_model.predict(vec)[0]
+            st.write("Prediction:", "✅ True" if pred == 1 else "❌ Fake")
+        else:
+            st.warning("⚠️ Please train the model first!")
