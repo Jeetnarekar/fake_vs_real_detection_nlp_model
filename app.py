@@ -15,9 +15,8 @@ from sklearn.naive_bayes import MultinomialNB
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix, classification_report
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
 from sklearn.preprocessing import LabelEncoder
-from sklearn.decomposition import PCA
 
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -149,10 +148,10 @@ st.markdown("""
         border-left: 4px solid var(--accent);
     }
     
-    /* Sidebar - Professional Style - Moved to right */
-    .css-1d391kg, .css-1lcbmhc {
-        background: white !important;
-        border-left: 1px solid var(--gray-300) !important;
+    /* Sidebar - Right Side */
+    section[data-testid="stSidebar"] {
+        background: white;
+        border-left: 1px solid var(--gray-300);
         box-shadow: -2px 0 10px rgba(0,0,0,0.05);
     }
     
@@ -270,8 +269,7 @@ st.markdown("""
     
     /* Hero Section */
     .hero-section {
-        background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(248,249,250,0.95) 100%), 
-                    url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3') center/cover;
+        background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(248,249,250,0.95) 100%);
         padding: 4rem 3rem;
         border-radius: 15px;
         margin: 2rem 0;
@@ -673,62 +671,63 @@ class ProfessionalVisualizer:
 # Professional Sidebar
 # ============================
 def setup_sidebar():
-    """Setup professional sidebar"""
-    st.sidebar.markdown("<div class='sidebar-header'>FACT CHECKER PRO</div>", unsafe_allow_html=True)
-    st.sidebar.markdown("---")
-    
-    st.sidebar.markdown("<div class='sidebar-header'>DATA UPLOAD</div>", unsafe_allow_html=True)
-    
-    uploaded_file = st.sidebar.file_uploader(
-        "Choose CSV File",
-        type=["csv"],
-        help="Upload your dataset for analysis"
-    )
-    
-    if uploaded_file is not None:
-        try:
-            df = pd.read_csv(uploaded_file)
-            st.session_state.df = df
-            st.session_state.file_uploaded = True
-            
-            st.sidebar.success(f"Successfully loaded {df.shape[0]} rows")
-            
-            st.sidebar.markdown("<div class='sidebar-header'>ANALYSIS CONFIGURATION</div>", unsafe_allow_html=True)
-            
-            text_col = st.sidebar.selectbox(
-                "Text Column",
-                df.columns,
-                help="Select column containing text data"
-            )
-            
-            target_col = st.sidebar.selectbox(
-                "Target Column",
-                df.columns,
-                help="Select column containing labels"
-            )
-            
-            feature_type = st.sidebar.selectbox(
-                "Feature Engineering",
-                ["Lexical", "Semantic", "Syntactic", "Pragmatic", "Comprehensive"],
-                help="Choose feature extraction method"
-            )
-            
-            st.session_state.config = {
-                'text_col': text_col,
-                'target_col': target_col,
-                'feature_type': feature_type
-            }
-            
-            if st.sidebar.button("START ANALYSIS", use_container_width=True):
-                st.session_state.analyze_clicked = True
-            else:
-                st.session_state.analyze_clicked = False
+    """Setup professional sidebar on the right side"""
+    with st.sidebar:
+        st.markdown("<div class='sidebar-header'>FACT CHECKER PRO</div>", unsafe_allow_html=True)
+        st.markdown("---")
+        
+        st.markdown("<div class='sidebar-header'>DATA UPLOAD</div>", unsafe_allow_html=True)
+        
+        uploaded_file = st.file_uploader(
+            "Choose CSV File",
+            type=["csv"],
+            help="Upload your dataset for analysis"
+        )
+        
+        if uploaded_file is not None:
+            try:
+                df = pd.read_csv(uploaded_file)
+                st.session_state.df = df
+                st.session_state.file_uploaded = True
                 
-        except Exception as e:
-            st.sidebar.error(f"Error loading file: {str(e)}")
-    else:
-        st.session_state.file_uploaded = False
-        st.session_state.analyze_clicked = False
+                st.success(f"Successfully loaded {df.shape[0]} rows")
+                
+                st.markdown("<div class='sidebar-header'>ANALYSIS CONFIGURATION</div>", unsafe_allow_html=True)
+                
+                text_col = st.selectbox(
+                    "Text Column",
+                    df.columns,
+                    help="Select column containing text data"
+                )
+                
+                target_col = st.selectbox(
+                    "Target Column",
+                    df.columns,
+                    help="Select column containing labels"
+                )
+                
+                feature_type = st.selectbox(
+                    "Feature Engineering",
+                    ["Lexical", "Semantic", "Syntactic", "Pragmatic", "Comprehensive"],
+                    help="Choose feature extraction method"
+                )
+                
+                st.session_state.config = {
+                    'text_col': text_col,
+                    'target_col': target_col,
+                    'feature_type': feature_type
+                }
+                
+                if st.button("START ANALYSIS", use_container_width=True):
+                    st.session_state.analyze_clicked = True
+                else:
+                    st.session_state.analyze_clicked = False
+                    
+            except Exception as e:
+                st.error(f"Error loading file: {str(e)}")
+        else:
+            st.session_state.file_uploaded = False
+            st.session_state.analyze_clicked = False
 
 # ============================
 # Enhanced Main Content
