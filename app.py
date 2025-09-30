@@ -35,62 +35,68 @@ st.set_page_config(
 )
 
 # ============================
-# Professional CSS
+# Purple and Black CSS Theme
 # ============================
 st.markdown("""
 <style>
-    /* Professional Color Scheme */
+    /* Purple and Black Color Scheme */
     :root {
-        --primary: #2E4057;
-        --secondary: #4A6572;
-        --accent: #3498DB;
-        --success: #27AE60;
-        --warning: #F39C12;
-        --danger: #E74C3C;
-        --light: #F8F9FA;
-        --dark: #212529;
-        --gray-100: #F8F9FA;
-        --gray-200: #E9ECEF;
-        --gray-300: #DEE2E6;
-        --gray-400: #CED4DA;
-        --gray-500: #ADB5BD;
-        --gray-600: #6C757D;
-        --gray-700: #495057;
-        --gray-800: #343A40;
-        --gray-900: #212529;
+        --primary: #6B46C1;
+        --primary-dark: #553C9A;
+        --primary-light: #9F7AEA;
+        --secondary: #1A202C;
+        --accent: #805AD5;
+        --success: #38A169;
+        --warning: #D69E2E;
+        --danger: #E53E3E;
+        --light: #F7FAFC;
+        --dark: #0F1419;
+        --text-light: #FFFFFF;
+        --text-dark: #2D3748;
+        --gray-100: #F7FAFC;
+        --gray-200: #EDF2F7;
+        --gray-300: #E2E8F0;
+        --gray-400: #CBD5E0;
+        --gray-500: #A0AEC0;
+        --gray-600: #718096;
+        --gray-700: #4A5568;
+        --gray-800: #2D3748;
+        --gray-900: #1A202C;
     }
     
     /* Main background */
     .stApp {
-        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-        color: var(--gray-800);
+        background: linear-gradient(135deg, var(--dark) 0%, var(--secondary) 100%);
+        color: var(--text-light);
     }
     
     /* Professional Header */
     .professional-header {
-        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
         padding: 2.5rem 0;
         margin-bottom: 2rem;
         border-radius: 0 0 15px 15px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
     }
     
     /* Cards */
     .professional-card {
-        background: white;
+        background: var(--secondary);
         border-radius: 12px;
         padding: 1.8rem;
         margin: 1rem 0;
-        border: none;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        border: 1px solid var(--primary);
+        box-shadow: 0 4px 15px rgba(107, 70, 193, 0.2);
         transition: all 0.3s ease;
         position: relative;
         overflow: hidden;
+        color: var(--text-light);
     }
     
     .professional-card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        box-shadow: 0 8px 25px rgba(107, 70, 193, 0.3);
+        border-color: var(--primary-light);
     }
     
     .professional-card::before {
@@ -100,31 +106,33 @@ st.markdown("""
         left: 0;
         right: 0;
         height: 4px;
-        background: linear-gradient(90deg, var(--accent) 0%, var(--primary) 100%);
+        background: linear-gradient(90deg, var(--primary-light) 0%, var(--primary) 100%);
     }
     
     /* Metric Cards */
     .metric-card {
-        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-        color: white;
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+        color: var(--text-light);
         padding: 1.8rem;
         border-radius: 12px;
         text-align: center;
         margin: 0.5rem;
         border: none;
-        box-shadow: 0 4px 15px rgba(46, 64, 87, 0.3);
+        box-shadow: 0 4px 15px rgba(107, 70, 193, 0.4);
         transition: all 0.3s ease;
     }
     
     .metric-card:hover {
         transform: translateY(-3px);
-        box-shadow: 0 6px 20px rgba(46, 64, 87, 0.4);
+        box-shadow: 0 6px 20px rgba(107, 70, 193, 0.6);
     }
     
     .metric-value {
         font-size: 2.2rem;
         font-weight: 700;
         margin-bottom: 0.5rem;
+        color: var(--text-light);
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
     }
     
     .metric-label {
@@ -133,45 +141,46 @@ st.markdown("""
         font-weight: 500;
         text-transform: uppercase;
         letter-spacing: 0.5px;
+        color: var(--text-light);
     }
     
     /* Sections */
     .section-header {
         font-size: 1.6rem;
         font-weight: 600;
-        color: var(--primary);
+        color: var(--text-light);
         margin: 2.5rem 0 1.5rem 0;
         padding: 0.8rem 1.2rem;
-        background: white;
+        background: var(--secondary);
         border-radius: 8px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        border-left: 4px solid var(--accent);
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        border-left: 4px solid var(--primary-light);
     }
     
     /* Sidebar - Right Side */
     section[data-testid="stSidebar"] {
-        background: white;
-        border-left: 1px solid var(--gray-300);
-        box-shadow: -2px 0 10px rgba(0,0,0,0.05);
+        background: var(--secondary) !important;
+        border-left: 2px solid var(--primary) !important;
+        box-shadow: -2px 0 10px rgba(0,0,0,0.3);
     }
     
     .sidebar-header {
         font-size: 1.2rem;
         font-weight: 600;
-        color: var(--primary);
+        color: var(--text-light);
         margin-bottom: 1.5rem;
         text-align: center;
         padding: 1rem;
-        background: linear-gradient(135deg, var(--light) 0%, white 100%);
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
         border-radius: 8px;
-        border-left: 4px solid var(--accent);
+        border-left: 4px solid var(--primary-light);
     }
     
     /* Buttons - Professional Style */
     .stButton button {
         width: 100%;
-        background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
-        color: white;
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+        color: var(--text-light);
         border: none;
         padding: 0.8rem 2rem;
         border-radius: 8px;
@@ -184,33 +193,33 @@ st.markdown("""
     
     .stButton button:hover {
         transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        box-shadow: 0 5px 15px rgba(107, 70, 193, 0.4);
+        background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
     }
     
     /* Select boxes and inputs */
     .stSelectbox, .stTextInput, .stNumberInput {
-        background: white !important;
-        color: var(--gray-800) !important;
-        border: 1px solid var(--gray-300) !important;
+        background: var(--secondary) !important;
+        color: var(--text-light) !important;
+        border: 1px solid var(--primary) !important;
         border-radius: 6px !important;
     }
     
     .stSelectbox div, .stTextInput input, .stNumberInput input {
-        background: white !important;
-        color: var(--gray-800) !important;
+        background: var(--secondary) !important;
+        color: var(--text-light) !important;
     }
     
     /* Tabs */
     .stTabs [data-baseweb="tab-list"] {
         gap: 0;
-        background: white;
-        border-bottom: 2px solid var(--gray-200);
-        border-radius: 8px 8px 0 0;
+        background: var(--secondary);
+        border-bottom: 2px solid var(--primary);
     }
     
     .stTabs [data-baseweb="tab"] {
-        background: white !important;
-        color: var(--gray-600) !important;
+        background: var(--secondary) !important;
+        color: var(--text-light) !important;
         border-radius: 0;
         padding: 1rem 2rem;
         border-bottom: 3px solid transparent;
@@ -218,42 +227,42 @@ st.markdown("""
     }
     
     .stTabs [aria-selected="true"] {
-        background: white !important;
-        color: var(--accent) !important;
-        border-bottom: 3px solid var(--accent) !important;
+        background: var(--secondary) !important;
+        color: var(--primary-light) !important;
+        border-bottom: 3px solid var(--primary-light) !important;
     }
     
     /* Expander */
     .streamlit-expanderHeader {
-        background: white !important;
-        color: var(--primary) !important;
-        border: 1px solid var(--gray-300) !important;
+        background: var(--secondary) !important;
+        color: var(--text-light) !important;
+        border: 1px solid var(--primary) !important;
         border-radius: 6px !important;
         font-weight: 600;
     }
     
     /* Progress bar */
     .stProgress > div > div > div {
-        background: linear-gradient(90deg, var(--accent) 0%, var(--primary) 100%);
+        background: linear-gradient(90deg, var(--primary-light) 0%, var(--primary) 100%);
     }
     
     /* Success, Error, Info */
     .stSuccess {
-        background: rgba(39, 174, 96, 0.1) !important;
+        background: rgba(56, 161, 105, 0.2) !important;
         border: 1px solid var(--success) !important;
         color: var(--success) !important;
         border-radius: 6px;
     }
     
     .stError {
-        background: rgba(231, 76, 60, 0.1) !important;
+        background: rgba(229, 62, 62, 0.2) !important;
         border: 1px solid var(--danger) !important;
         color: var(--danger) !important;
         border-radius: 6px;
     }
     
     .stInfo {
-        background: rgba(52, 152, 219, 0.1) !important;
+        background: rgba(128, 90, 213, 0.2) !important;
         border: 1px solid var(--accent) !important;
         color: var(--accent) !important;
         border-radius: 6px;
@@ -261,40 +270,43 @@ st.markdown("""
     
     /* Dataframe styling */
     .dataframe {
-        background: white !important;
-        color: var(--gray-800) !important;
+        background: var(--secondary) !important;
+        color: var(--text-light) !important;
         border-radius: 8px;
         overflow: hidden;
+        border: 1px solid var(--primary);
     }
     
     /* Hero Section */
     .hero-section {
-        background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(248,249,250,0.95) 100%);
+        background: linear-gradient(135deg, rgba(26, 32, 44, 0.95) 0%, rgba(15, 20, 25, 0.95) 100%);
         padding: 4rem 3rem;
         border-radius: 15px;
         margin: 2rem 0;
         text-align: center;
-        border: 1px solid var(--gray-200);
-        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        border: 1px solid var(--primary);
+        box-shadow: 0 8px 25px rgba(107, 70, 193, 0.3);
     }
     
     /* Model Performance Cards */
     .model-card {
-        background: white;
+        background: var(--secondary);
         border-radius: 10px;
         padding: 1.8rem;
         margin: 1rem;
-        border: none;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        border: 1px solid var(--primary);
+        box-shadow: 0 4px 15px rgba(107, 70, 193, 0.2);
         text-align: center;
         transition: all 0.3s ease;
         position: relative;
         overflow: hidden;
+        color: var(--text-light);
     }
     
     .model-card:hover {
+        border-color: var(--primary-light);
         transform: translateY(-5px);
-        box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        box-shadow: 0 8px 25px rgba(107, 70, 193, 0.3);
     }
     
     .model-card::before {
@@ -304,42 +316,69 @@ st.markdown("""
         left: 0;
         right: 0;
         height: 4px;
-        background: linear-gradient(90deg, var(--accent) 0%, var(--primary) 100%);
+        background: linear-gradient(90deg, var(--primary-light) 0%, var(--primary) 100%);
     }
     
     .model-accuracy {
         font-size: 2rem;
         font-weight: 700;
-        color: var(--primary);
+        color: var(--primary-light);
         margin: 1rem 0;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
     }
     
     /* Feature Tags */
     .feature-tag {
-        background: rgba(52, 152, 219, 0.1);
-        color: var(--accent);
+        background: rgba(107, 70, 193, 0.2);
+        color: var(--primary-light);
         padding: 0.5rem 1.2rem;
         border-radius: 20px;
         font-size: 0.8rem;
         font-weight: 600;
         margin: 0.3rem;
         display: inline-block;
-        border: 1px solid rgba(52, 152, 219, 0.2);
+        border: 1px solid rgba(107, 70, 193, 0.4);
         transition: all 0.3s ease;
     }
     
     .feature-tag:hover {
-        background: rgba(52, 152, 219, 0.2);
+        background: rgba(107, 70, 193, 0.3);
         transform: translateY(-2px);
+        border-color: var(--primary-light);
     }
     
     /* Charts container */
     .chart-container {
-        background: white;
+        background: var(--secondary);
         border-radius: 12px;
         padding: 1.5rem;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        box-shadow: 0 4px 15px rgba(107, 70, 193, 0.2);
         margin: 1rem 0;
+        border: 1px solid var(--primary);
+    }
+    
+    /* Text visibility enhancements */
+    .stMarkdown, .stText, .stHeader, .stSubheader {
+        color: var(--text-light) !important;
+    }
+    
+    .stDataFrame {
+        color: var(--text-light) !important;
+    }
+    
+    /* Ensure all text is visible */
+    * {
+        color: var(--text-light) !important;
+    }
+    
+    /* Specific text color overrides */
+    .st-bq, .st-br, .st-bs, .st-bt {
+        color: var(--text-light) !important;
+    }
+    
+    /* Plotly chart background */
+    .js-plotly-plot .plotly {
+        background: var(--secondary) !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -537,7 +576,7 @@ class ProfessionalVisualizer:
             horizontal_spacing=0.08
         )
         
-        colors = ['#3498DB', '#2E4057', '#27AE60', '#F39C12']
+        colors = ['#9F7AEA', '#805AD5', '#6B46C1', '#553C9A']
         
         # Accuracy
         fig.add_trace(
@@ -578,16 +617,17 @@ class ProfessionalVisualizer:
         fig.update_layout(
             height=600,
             showlegend=False,
-            paper_bgcolor='white',
-            plot_bgcolor='white',
-            font=dict(color='#2E4057'),
+            paper_bgcolor='#1A202C',
+            plot_bgcolor='#1A202C',
+            font=dict(color='#FFFFFF'),
             margin=dict(t=80, b=80, l=80, r=80)
         )
         
         # Update axes
         for i in range(4):
-            fig.update_yaxes(range=[0, 1], row=(i//2)+1, col=(i%2)+1, gridcolor='#E9ECEF')
-            fig.update_xaxes(tickangle=45, row=(i//2)+1, col=(i%2)+1)
+            fig.update_yaxes(range=[0, 1], row=(i//2)+1, col=(i%2)+1, gridcolor='#4A5568', color='#FFFFFF')
+            fig.update_xaxes(tickangle=45, row=(i//2)+1, col=(i%2)+1, color='#FFFFFF')
+            fig.update_annotations(font_color='#FFFFFF')
         
         return fig
     
@@ -610,15 +650,15 @@ class ProfessionalVisualizer:
             x=labels,
             y=labels,
             title=f"Confusion Matrix - {best_model_name}",
-            color_continuous_scale='Blues'
+            color_continuous_scale='Purples'
         )
         
         fig.update_layout(
             xaxis_title="Predicted",
             yaxis_title="Actual",
-            paper_bgcolor='white',
-            plot_bgcolor='white',
-            font=dict(color='#2E4057')
+            paper_bgcolor='#1A202C',
+            plot_bgcolor='#1A202C',
+            font=dict(color='#FFFFFF')
         )
         
         return fig
@@ -642,7 +682,7 @@ class ProfessionalVisualizer:
         
         fig = go.Figure()
         
-        colors = ['#3498DB', '#2E4057', '#27AE60', '#F39C12']
+        colors = ['#9F7AEA', '#805AD5', '#6B46C1', '#553C9A']
         
         for i, (model, metric_values) in enumerate(zip(models, values)):
             fig.add_trace(go.Scatterpolar(
@@ -657,18 +697,21 @@ class ProfessionalVisualizer:
             polar=dict(
                 radialaxis=dict(
                     visible=True,
-                    range=[0, 1]
-                )),
+                    range=[0, 1],
+                    color='#FFFFFF'
+                ),
+                bgcolor='#1A202C'
+            ),
             showlegend=True,
             title="Model Performance Radar Chart",
-            paper_bgcolor='white',
-            font=dict(color='#2E4057')
+            paper_bgcolor='#1A202C',
+            font=dict(color='#FFFFFF')
         )
         
         return fig
 
 # ============================
-# Professional Sidebar
+# Professional Sidebar (Right Side)
 # ============================
 def setup_sidebar():
     """Setup professional sidebar on the right side"""
@@ -802,7 +845,13 @@ def main_content():
                 fig = px.bar(target_dist, 
                            title="Target Variable Distribution",
                            labels={'value': 'Count', 'index': config['target_col']})
-                fig.update_layout(paper_bgcolor='white', plot_bgcolor='white')
+                fig.update_layout(
+                    paper_bgcolor='#1A202C',
+                    plot_bgcolor='#1A202C',
+                    font=dict(color='#FFFFFF'),
+                    xaxis=dict(color='#FFFFFF'),
+                    yaxis=dict(color='#FFFFFF')
+                )
                 st.plotly_chart(fig, use_container_width=True)
     
     # Analysis Results
@@ -813,10 +862,10 @@ def show_professional_welcome():
     """Professional welcome screen"""
     st.markdown("""
     <div class='hero-section'>
-        <h1 style='color: #2E4057; font-size: 2.8rem; font-weight: 700; margin-bottom: 1.5rem;'>
+        <h1 style='color: #FFFFFF; font-size: 2.8rem; font-weight: 700; margin-bottom: 1.5rem;'>
             Welcome to Fact Checker Pro
         </h1>
-        <p style='color: #6C757D; font-size: 1.2rem; margin-bottom: 2.5rem; line-height: 1.6;'>
+        <p style='color: #CBD5E0; font-size: 1.2rem; margin-bottom: 2.5rem; line-height: 1.6;'>
             Advanced text analysis platform for fact verification and content validation. 
             Leverage machine learning algorithms to analyze and classify textual content.
         </p>
@@ -843,8 +892,8 @@ def show_professional_welcome():
         with cols[idx]:
             st.markdown(f"""
             <div class="professional-card">
-                <h3 style="color: #2E4057; margin-bottom: 1rem; text-align: center;">{step['title']}</h3>
-                <p style="color: #6C757D; line-height: 1.5; text-align: center;">{step['desc']}</p>
+                <h3 style="color: #FFFFFF; margin-bottom: 1rem; text-align: center;">{step['title']}</h3>
+                <p style="color: #CBD5E0; line-height: 1.5; text-align: center;">{step['desc']}</p>
             </div>
             """, unsafe_allow_html=True)
 
@@ -921,24 +970,24 @@ def perform_professional_analysis(df, config):
                 accuracy = result['accuracy']
                 st.markdown(f"""
                 <div class="model-card">
-                    <h4 style="color: #2E4057; margin-bottom: 1rem;">{model_name}</h4>
+                    <h4 style="color: #FFFFFF; margin-bottom: 1rem;">{model_name}</h4>
                     <div class="model-accuracy">{accuracy:.1%}</div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; color: #6C757D;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; color: #CBD5E0;">
                         <div style="text-align: center;">
                             <small>Precision</small>
-                            <div style="font-weight: 600; color: #2E4057;">{result['precision']:.3f}</div>
+                            <div style="font-weight: 600; color: #9F7AEA;">{result['precision']:.3f}</div>
                         </div>
                         <div style="text-align: center;">
                             <small>Recall</small>
-                            <div style="font-weight: 600; color: #2E4057;">{result['recall']:.3f}</div>
+                            <div style="font-weight: 600; color: #9F7AEA;">{result['recall']:.3f}</div>
                         </div>
                         <div style="text-align: center;">
                             <small>F1-Score</small>
-                            <div style="font-weight: 600; color: #2E4057;">{result['f1_score']:.3f}</div>
+                            <div style="font-weight: 600; color: #9F7AEA;">{result['f1_score']:.3f}</div>
                         </div>
                         <div style="text-align: center;">
                             <small>Test Size</small>
-                            <div style="font-weight: 600; color: #2E4057;">{result['test_size']}</div>
+                            <div style="font-weight: 600; color: #9F7AEA;">{result['test_size']}</div>
                         </div>
                     </div>
                 </div>
@@ -976,15 +1025,15 @@ def perform_professional_analysis(df, config):
         best_model = max(successful_models.items(), key=lambda x: x[1]['accuracy'])
         st.markdown(f"""
         <div class="professional-card">
-            <h3 style="color: #2E4057; margin-bottom: 1rem;">RECOMMENDED MODEL</h3>
-            <div style="background: linear-gradient(135deg, #27AE60, #2ECC71); color: white; padding: 1.5rem; border-radius: 8px;">
+            <h3 style="color: #FFFFFF; margin-bottom: 1rem;">RECOMMENDED MODEL</h3>
+            <div style="background: linear-gradient(135deg, #6B46C1, #553C9A); color: white; padding: 1.5rem; border-radius: 8px;">
                 <h4 style="margin: 0 0 0.5rem 0; color: white;">{best_model[0]}</h4>
                 <p style="margin: 0; font-size: 1.1rem;">
                     Achieved the highest accuracy of <strong>{best_model[1]['accuracy']:.1%}</strong>
                     with balanced performance across all metrics.
                 </p>
             </div>
-            <p style="color: #6C757D; margin-top: 1rem;">
+            <p style="color: #CBD5E0; margin-top: 1rem;">
                 This model demonstrates robust performance and is recommended for production deployment.
             </p>
         </div>
